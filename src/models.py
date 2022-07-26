@@ -7,7 +7,7 @@ class Book(db.Model):
     __tablename__ = "books"
 
     id = db.Column(db.Integer, primary_key=True)
-    uid = uuid.uuid4()
+    uuid = db.Column(db.String(36), unique=True)
     title = db.Column(db.String(120), nullable=False)
     author = db.Column(db.String(80), nullable=False)
     description = db.Column(db.Text, unique=True, nullable=False)
@@ -16,8 +16,8 @@ class Book(db.Model):
     language = db.Column(db.String(20))
     rating = db.Column(db.Float)
 
-    def __init__(self, uid, title, author, description, release_date, publisher, language, rating):
-        self.uid = uid
+    def __init__(self, title, author, description, release_date, publisher, language, rating):
+        self.uuid = str(uuid.uuid4())
         self.title = title
         self.author = author
         self.description = description
@@ -27,11 +27,11 @@ class Book(db.Model):
         self.rating = rating
 
     def __repr__(self):
-        return f'Book({self.uid}, {self.title}, {self.author})'
+        return f'Book({self.uuid}, {self.title}, {self.author})'
 
     def to_dict(self):
         return {
-            "uid": self.uid,
+            "uuid": self.uuid,
             "title": self.title,
             "author": self.author,
             "description": self.description,
