@@ -15,7 +15,7 @@ def insert():
         publisher="Wordsworth Editions",
         language="eng",
         rating=5.0
-    ),
+    )
     book_treasure_island = Book(
         title="Treasure Island",
         author="Robert Louis Balfour Stevenson",
@@ -26,7 +26,7 @@ def insert():
         publisher="Wordsworth Editions",
         language="eng",
         rating=5.0
-    ),
+    )
     book_annapurna = Book(
         title="Annapurna",
         author="Maurice Herzog",
@@ -39,7 +39,7 @@ def insert():
         publisher="Random House",
         language="eng",
         rating=3.5
-    ),
+    )
     book_the_thirteenth_tale = Book(
         title="The Thirteenth Tale",
         author="Diane Setterfield",
@@ -50,7 +50,7 @@ def insert():
         publisher="Atria Books",
         language="eng",
         rating=4.5
-    ),
+    )
     book_brave_new_world = Book(
         title="Brave New World",
         author="Aldous Huxley",
