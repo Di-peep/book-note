@@ -35,7 +35,7 @@ class Book(db.Model):
             "title": self.title,
             "author": self.author,
             "description": self.description,
-            "release_date": self.release_date,
+            "release_date": self.release_date.strftime("%Y"),
             "publisher": self.publisher,
             "language": self.language,
             "rating": self.rating
