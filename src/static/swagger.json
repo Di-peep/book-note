@@ -1,0 +1,273 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Book Note Swagger UI",
+    "description": "This is a sample server for a book note.",
+    "contact": {
+      "name": "Dmytro Vihor",
+      "url": "https://github.com/Di-peep",
+      "email": "vdude112358@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "The production API server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Book Request",
+      "description": "Example API for requesting and return books requests"
+    }
+  ],
+  "paths": {
+    "/books": {
+      "get": {
+        "tags": [
+          "Book Request"
+        ],
+        "description": "Returns all available books in the system",
+        "responses": {
+          "200": {
+            "description": "A list of books.",
+            "schema": {
+              "type": "array",
+              "$ref": "#/components/schemas/booksResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Book Request"
+        ],
+        "summary": "Create a new book",
+        "requestBody": {
+          "description": "Book Request Post Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/books"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          },
+          "400": {
+            "description": "Failed. Wrong data."
+          }
+        }
+      }
+    },
+    "/books/{uuid}": {
+      "get": {
+        "tags": [
+          "Book Request"
+        ],
+        "summary": "Get book with given uuid",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "description": "Book Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/book"
+            }
+          },
+          "400": {
+            "description": "Failed. Wrong data."
+          },
+          "404": {
+            "description": "Failed. Book was not found."
+          }
+        }
+      },
+      "put": {
+        "summary": "Edit a book by uuid",
+        "tags": [
+          "Book Request"
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "description": "Book Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Book Request Object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/book"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/book"
+            }
+          },
+          "400": {
+            "description": "Failed. Wrong data."
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete book by uuid",
+        "tags": [
+          "Book Request"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "uuid",
+            "required": true,
+            "description": "Book Request uuid",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Book was not found."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "uuid": {
+        "properties": {
+          "uuid": {
+            "type": "string"
+          }
+        }
+      },
+      "books": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "format": "string"
+          },
+          "author": {
+            "type": "string",
+            "format": "string"
+          },
+          "description": {
+            "type": "string",
+            "format": "text"
+          },
+          "release_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "publisher": {
+            "type": "string",
+            "format": "string"
+          },
+          "language": {
+            "type": "string",
+            "format": "string"
+          },
+          "rating": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "book": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "format": "string"
+          },
+          "author": {
+            "type": "string",
+            "format": "string"
+          },
+          "description": {
+            "type": "string",
+            "format": "text"
+          },
+          "release_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "publisher": {
+            "type": "string",
+            "format": "string"
+          },
+          "language": {
+            "type": "string",
+            "format": "string"
+          },
+          "rating": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      },
+      "booksResponse": {
+        "type": "object",
+        "properties": {
+          "bookRequest": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/book"
+            }
+          }
+        }
+      }
+    }
+  }
+}
