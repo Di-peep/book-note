@@ -35,7 +35,7 @@ class Books(Resource):
                 title=book["title"],
                 author=book["author"],
                 description=book["description"],
-                release_date=datetime.strftime(book["release_date"], "%Y %m %d"),
+                release_date=datetime.strptime(book["release_date"], "%Y %m %d"),
                 publisher=book.get("publisher"),
                 language=book.get("language", "eng"),
                 rating=book.get("rating", 0.0)
