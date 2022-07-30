@@ -38,8 +38,19 @@ class Books(Resource):
         db.session.commit()
         return {'message': 'Created resource'}, 201
 
-    def put(self):
-        pass
+    def put(self, uuid):
+        book = db.session.query(Book).filter_by(uuid=uuid).first()
+        if not book:
+            return {'message': 'not found'}, 404
+
+        try:
+            book = self.book_schema.load(request.json, instance=book, session=db.session)
+        except ValidationError as e:
+            return {'message': str(e)}, 400
+
+        db.session.add(book)
+        db.session.commit()
+        return self.book_schema.dump(book), 200
 
     def patch(self):
         pass
