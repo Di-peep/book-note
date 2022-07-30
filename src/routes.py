@@ -2,9 +2,11 @@ from datetime import datetime
 
 from flask import request
 from flask_restful import Resource
+from marshmallow import ValidationError
 
 from src import api, db
 from src.models import Book
+from src.schemas import BookSchema
 
 
 class Smoke(Resource):
@@ -13,38 +15,27 @@ class Smoke(Resource):
 
 
 class Books(Resource):
+    book_schema = BookSchema()
+
     def get(self, uuid=None):
         if not uuid:
             books = db.session.query(Book).all()
-            books = [book.to_dict() for book in books]
-            return books, 200
+            return self.book_schema.dump(books, many=True), 200
 
         book = db.session.query(Book).filter_by(uuid=uuid).first()
         if book:
-            return book.to_dict(), 200
+            return self.book_schema.dump(book), 200
 
         return {'message': 'not found'}, 404
 
     def post(self):
-        book = request.json
-        if not book:
-            return {'message': 'wrong data'}, 400
-
         try:
-            book = Book(
-                title=book["title"],
-                author=book["author"],
-                description=book["description"],
-                release_date=datetime.strptime(book["release_date"], "%Y %m %d"),
-                publisher=book.get("publisher"),
-                language=book.get("language", "eng"),
-                rating=book.get("rating", 0.0)
-            )
-            db.session.add(book)
-            db.session.commit()
-        except (ValueError, KeyError):
-            return {'message': 'wrong data'}, 400
+            book = self.book_schema.load(request.json, session=db.session)
+        except ValidationError as e:
+            return {'message': str(e)}, 400
 
+        db.session.add(book)
+        db.session.commit()
         return {'message': 'Created resource'}, 201
 
     def put(self):
