@@ -40,3 +40,7 @@ class Book(db.Model):
             "language": self.language,
             "rating": self.rating
         }
+
+
+class Author(db.Model):
+    pass
