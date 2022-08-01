@@ -43,4 +43,17 @@ class Book(db.Model):
 
 
 class Author(db.Model):
-    pass
+    __tablename__ = "authors"
+
+    id = db.Column(db.Integer, primary_key=True)
+    uuid = db.Column(db.String(36), unique=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    description = db.Column(db.Text, unique=True, nullable=True)
+
+    def __init__(self, name, description):
+        self.uuid = str(uuid.uuid4())
+        self.name = name
+        self.description = description
+
+    def __repr__(self):
+        return f"Author({self.uuid}, {self.name})"
