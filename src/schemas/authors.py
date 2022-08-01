@@ -1,6 +1,6 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
-from src.models import Author
+from src.database.models import Author
 
 
 class BookSchema(SQLAlchemyAutoSchema):

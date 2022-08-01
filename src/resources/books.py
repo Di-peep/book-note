@@ -3,8 +3,8 @@ from flask_restful import Resource
 from marshmallow import ValidationError
 
 from src import db
-from src.models import Book
-from src.schemas import BookSchema
+from src.database.models import Book
+from src.schemas.books import BookSchema
 
 
 class Books(Resource):

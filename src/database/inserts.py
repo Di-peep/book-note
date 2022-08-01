@@ -1,7 +1,7 @@
 from datetime import date
 
 from src import db
-from src.models import Book
+from src.database.models import Book
 
 
 def insert():
