@@ -1,13 +1,19 @@
 from datetime import date
 
 from src import db
-from src.database.models import Book
+from src.database.models import Book, Author
 
 
 def insert():
+    lewis_carroll = Author(name="Lewis Carroll")
+    robert_stevenson = Author(name="Robert Louis Balfour Stevenson")
+    maurice_herzog = Author(name="Maurice Herzog")
+    diane_setterfield = Author(name="Diane Setterfield")
+    aldous_huxley = Author(name="Aldous Huxley")
+
     book_alice_in_wonderland = Book(
         title="Alice In Wonderland",
-        author="Lewis Carroll",
+        author=lewis_carroll,
         description="This edition contains Alice's Adventures in Wonderland and its sequel Through the Looking Glass. "
                     "It is illustrated throughout by Sir John Tenniel, whose drawings for the books add so much "
                     "to the enjoyment of them.",
@@ -18,7 +24,7 @@ def insert():
     )
     book_treasure_island = Book(
         title="Treasure Island",
-        author="Robert Louis Balfour Stevenson",
+        author=robert_stevenson,
         description="Treasure Island is a tale of pirates and villains, maps, treasure and shipwreck. "
                     "When young Jim Hawkins finds a packet in Captain Flint's sea chest, he could not know that "
                     "the map inside it would lead him to unimaginable treasure.",
@@ -29,7 +35,7 @@ def insert():
     )
     book_annapurna = Book(
         title="Annapurna",
-        author="Maurice Herzog",
+        author=maurice_herzog,
         description="In 1950, no mountain higher than 8,000 meters had ever been climbed. "
                     "Maurice Herzog and other members of the French Alpine Club resolved to try. "
                     "This is the enthralling story of the first conquest of Annapurna and the harrowing descent. "
@@ -42,7 +48,7 @@ def insert():
     )
     book_the_thirteenth_tale = Book(
         title="The Thirteenth Tale",
-        author="Diane Setterfield",
+        author=diane_setterfield,
         description="The story of the residents of Angelfield House and follows ageing novelist Vida Winter, who "
                     "enlists a young writer to finally tell the story of her life - including her mysterious childhood "
                     "spent in Angelfield House, which burned to the ground when she was a teenager.",
@@ -53,7 +59,7 @@ def insert():
     )
     book_brave_new_world = Book(
         title="Brave New World",
-        author="Aldous Huxley",
+        author=aldous_huxley,
         description="The novel examines a futuristic society, called the World State, that revolves around science and "
                     "efficiency. In this society, emotions and individuality are conditioned out of children at a young"
                     " age, and there are no lasting relationships because “every one belongs to every one else”",
@@ -62,6 +68,8 @@ def insert():
         language="eng",
         rating=3.5
     )
+
+    db.session.add_all([lewis_carroll, robert_stevenson, maurice_herzog, diane_setterfield, aldous_huxley])
 
     db.session.add(book_alice_in_wonderland)
     db.session.add(book_treasure_island)
