@@ -1,4 +1,5 @@
 import datetime
+from functools import wraps
 
 import jwt
 from flask import request, jsonify
@@ -51,3 +52,24 @@ class LoginUser(Resource):
             }, app.config['SECRET_KEY']
         )
         return jsonify({"token": token})
+
+
+def token_required(func):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        token = request.headers.get('X-API-KEY', '')
+        if not token:
+            return "No token", 401, {"WWW-Authenticate": "Basic realm='Authentication required'"}
+
+        try:
+            uuid = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])['user_id']
+        except (KeyError, jwt.ExpiredSignatureError):
+            return "Bad token", 401, {"WWW-Authenticate": "Basic realm='Authentication required'"}
+
+        user = db.session.query(User).filter_by(uuid=uuid).first()
+        if not user:
+            return "No such user", 401, {"WWW-Authenticate": "Basic realm='Authentication required'"}
+
+        return func(self, *args, **kwargs)
+
+    return wrapper
