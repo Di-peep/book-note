@@ -1,9 +1,14 @@
-from flask import request
+import datetime
+
+import jwt
+from flask import request, jsonify
 from flask_restful import Resource
 from marshmallow import ValidationError
 from sqlalchemy.exc import IntegrityError
+from werkzeug.security import check_password_hash
 
-from src import db
+from src import db, app
+from src.database.models import User
 from src.schemas.users import UserSchema
 
 
@@ -24,3 +29,25 @@ class RegisterUser(Resource):
             return {"message": "Such user exists"}, 409
 
         return self.user_schema.dump(user), 201
+
+
+class LoginUser(Resource):
+    def get(self):
+        auth = request.authorization
+        if not auth:
+            return "No authorization", 401, {"WWW-Authenticate": "Basic realm='Authentication required'"}
+
+        user = db.session.query(User).filter_by(username=auth.get('username', '')).first()
+        if not user:
+            return "No such user", 401, {"WWW-Authenticate": "Basic realm='Authentication required'"}
+
+        if not check_password_hash(user.password, auth.get('password', '')):
+            return "Wrong password", 401, {"WWW-Authenticate": "Basic realm='Authentication required'"}
+
+        token = jwt.encode(
+            {
+                "user_id": user.uuid,
+                "exp": datetime.datetime.now() + datetime.timedelta(hours=10)
+            }, app.config['SECRET_KEY']
+        )
+        return jsonify({"token": token})
