@@ -4,6 +4,7 @@ from marshmallow import ValidationError
 
 from src import db
 from src.database.models import Book
+from src.resources.auth import token_required
 from src.schemas.books import BookSchema
 
 
@@ -21,6 +22,7 @@ class Books(Resource):
 
         return {'message': 'not found'}, 404
 
+    @token_required
     def post(self):
         try:
             book = self.book_schema.load(request.json, session=db.session)
@@ -31,6 +33,7 @@ class Books(Resource):
         db.session.commit()
         return {'message': 'Created resource'}, 201
 
+    @token_required
     def put(self, uuid):
         book = db.session.query(Book).filter_by(uuid=uuid).first()
         if not book:
@@ -45,9 +48,11 @@ class Books(Resource):
         db.session.commit()
         return self.book_schema.dump(book), 200
 
+    @token_required
     def patch(self):
         pass
 
+    @token_required
     def delete(self, uuid):
         book = db.session.query(Book).filter_by(uuid=uuid).first()
         if not book:

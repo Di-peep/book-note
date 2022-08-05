@@ -4,6 +4,7 @@ from marshmallow import ValidationError
 
 from src import db
 from src.database.models import Author
+from src.resources.auth import token_required
 from src.schemas.authors import AuthorSchema
 
 
@@ -21,6 +22,7 @@ class Authors(Resource):
 
         return {'message': 'not found'}, 404
 
+    @token_required
     def post(self):
         try:
             author = self.author_schema.load(request.json, session=db.session)
@@ -31,6 +33,7 @@ class Authors(Resource):
         db.session.commit()
         return {'message': 'Created resource'}, 201
 
+    @token_required
     def put(self, uuid):
         author = db.session.query(Author).filter_by(uuid=uuid).first()
         if not author:
@@ -45,9 +48,11 @@ class Authors(Resource):
         db.session.commit()
         return self.author_schema.dump(author), 200
 
+    @token_required
     def patch(self):
         pass
 
+    @token_required
     def delete(self, uuid):
         author = db.session.query(Author).filter_by(uuid=uuid).first()
         if not author:
