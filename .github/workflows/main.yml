@@ -25,7 +25,7 @@ jobs:
         run: pip install -r requirements.txt
         
       - name: Run tests
-        run: coverage run tests/test_smoke.py
+        run: python -m pytest tests/
         
       - name: Tests report
         run: coverage report
