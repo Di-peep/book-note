@@ -6,3 +6,4 @@ venv/
 src/__pycache__/ 
 __pycache__/ 
 src/static/swagger_test.json 
+data/ 
